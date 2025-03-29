@@ -16,7 +16,7 @@ Este é o back-end para a aplicação de gerenciamento de uma clínica veteriná
 * [Requisitos](#requisitos)
 * [Como Executar](#como-executar)
 * [Contribuição](#contribuição)
-* [Contato](#contato)
+* [Autores](#autores)
 
 =================
 
