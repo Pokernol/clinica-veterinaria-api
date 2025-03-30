@@ -22,4 +22,9 @@ public class Pet {
     public String getDono() {
         return dono;
     }
+
+    @Override
+    public String toString() {
+        return "Pet de nome: " + nome + ", ele é da espécie: " + especie + ", o dono dele é: " + dono;
+    }
 }
