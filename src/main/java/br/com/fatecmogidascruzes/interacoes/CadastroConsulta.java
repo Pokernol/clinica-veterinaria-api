@@ -1,8 +1,9 @@
 package br.com.fatecmogidascruzes.interacoes;
 
-import br.com.fatecmogidascruzes.builders.ConsultaBuilder;
 import br.com.fatecmogidascruzes.entities.Consulta;
 import br.com.fatecmogidascruzes.entities.Pet;
+import br.com.fatecmogidascruzes.factories.ConsultaFactory;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,13 +25,24 @@ public class CadastroConsulta {
             System.out.println("Digite o nome do veterinário:");
             String veterinario = scanner.nextLine();
 
-            Consulta novaConsulta = new ConsultaBuilder()
-                    .withPet(petEscolhido)
-                    .withData(data)
-                    .withVeterinario(veterinario)
-                    .build();
+            System.out.println("Digite observações (opcional):");
+            String observacoes = scanner.nextLine();
+            if (observacoes.isEmpty()) {
+                observacoes = "Nenhuma observação.";
+            }
 
-            System.out.println("\nConsulta agendada com sucesso para " + petEscolhido.getNome() + " com o veterinário " + veterinario + " na data " + data);
+
+            Consulta novaConsulta = ConsultaFactory.create(petEscolhido, data, veterinario, observacoes);
+
+            System.out.println("\nConsulta agendada com sucesso para " + 
+                                petEscolhido.getNome() + 
+                                " com o veterinário " + 
+                                veterinario + 
+                                " na data " + 
+                                data + 
+                                ".\nObservações: " + 
+                                observacoes
+                                + "\n");
 
             return novaConsulta;
         }
