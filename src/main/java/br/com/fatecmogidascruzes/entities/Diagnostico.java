@@ -21,4 +21,12 @@ public class Diagnostico implements ServicoVeterinario {
     public void realizarServico() {
         System.out.println("Diagnóstico para " + pet.getNome() + ": " + descricao);
     }
+
+    @Override
+    public String toString() {
+        return "Diagnostico{" +
+                "pet=" + pet.getNome() +
+                ", descricao='" + descricao + '\'' +
+                '}';
+    }
 }
