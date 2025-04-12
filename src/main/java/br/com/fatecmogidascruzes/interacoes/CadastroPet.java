@@ -1,32 +1,33 @@
 package br.com.fatecmogidascruzes.interacoes;
 
 import br.com.fatecmogidascruzes.entities.Pet;
+import br.com.fatecmogidascruzes.factories.PetFactory;
+
 import java.util.Scanner;
 
 public class CadastroPet {
     public static Pet cadastrarPet() {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        // Exibe as opções de cadastro para o usuário
-        System.out.println("\nDigite os dados do novo pet:");
+            System.out.println("\nDigite os dados do novo pet:");
 
-        System.out.println("Digite o nome do pet:");
-        String nome = scanner.nextLine();
+            System.out.println("Digite o nome do pet:");
+            String nome = scanner.nextLine();
 
-        System.out.println("Digite o tipo do pet (ex: Cachorro, Gato):");
-        String tipo = scanner.nextLine();
+            System.out.println("Digite o tipo do pet (ex: Cachorro, Gato):");
+            String tipo = scanner.nextLine();
 
-        System.out.println("Digite o nome do dono do pet:");
-        String dono = scanner.nextLine();
+            System.out.println("Digite o nome do dono do pet:");
+            String dono = scanner.nextLine();
 
-        // Cria o novo pet
-        Pet novoPet = new Pet(nome, tipo, dono);
+            System.out.println("Digite a idade do pet:");
+            int idade = scanner.nextInt();
 
-        // Confirma o cadastro do pet
-        System.out.println("\nCadastro de pet realizado com sucesso!");
-        System.out.println(novoPet);
+            Pet novoPet = PetFactory.create(nome, tipo, dono, idade);
 
-        // Retorna o pet cadastrado
-        return novoPet;
+            System.out.println("\nCadastro de pet realizado com sucesso!");
+            System.out.println(novoPet);
+            return novoPet;
+        }
     }
 }
