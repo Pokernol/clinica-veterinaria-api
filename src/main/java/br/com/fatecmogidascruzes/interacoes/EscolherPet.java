@@ -16,7 +16,7 @@ public class EscolherPet {
             System.out.println((i + 1) + " - " + pets.get(i).getNome() + " (Tipo: " + pets.get(i).getEspecie() + ")");
         }
         int petIndex = scanner.nextInt();
-        scanner.nextLine();  // Limpa o buffer
+        scanner.nextLine();
 
         if (petIndex < 1 || petIndex > pets.size()) {
             System.out.println("Opção inválida.");

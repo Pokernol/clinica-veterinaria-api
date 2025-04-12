@@ -15,4 +15,13 @@ public class Prescricao implements ServicoVeterinario {
     public void realizarServico() {
         System.out.println("Prescrição para " + pet.getNome() + ": " + medicamento + " - " + dosagem);
     }
+
+    @Override
+    public String toString() {
+        return "Prescricao{" +
+                "pet=" + pet.getNome() +
+                ", medicamento='" + medicamento + '\'' +
+                ", dosagem='" + dosagem + '\'' +
+                '}';
+    }
 }

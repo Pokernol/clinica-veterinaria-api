@@ -25,6 +25,10 @@ public class Pet {
 
     @Override
     public String toString() {
-        return "Pet de nome: " + nome + ", ele é da espécie: " + especie + ", o dono dele é: " + dono;
+        return "Pet{" +
+                "nome='" + nome + '\'' +
+                ", especie='" + especie + '\'' +
+                ", dono='" + dono + '\'' +
+                '}';
     }
 }
