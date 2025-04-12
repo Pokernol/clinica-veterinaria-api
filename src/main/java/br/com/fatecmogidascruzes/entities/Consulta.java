@@ -11,8 +11,30 @@ public class Consulta implements ServicoVeterinario {
         this.veterinario = veterinario;
     }
 
+    public Pet getPet() {
+        return pet;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getVeterinario() {
+        return veterinario;
+    }
+
     @Override
     public void realizarServico() {
-        System.out.println("Consulta realizada para " + pet.getNome() + " com o veterinário " + veterinario + " na data " + data);
+        System.out.println("Consulta realizada para " + pet.getNome() + 
+                " com o veterinário " + getVeterinario() + " na data " + getData());
+    }
+
+    @Override
+    public String toString() {
+        return "Consulta{" +
+                "pet=" + pet +
+                ", data='" + data + '\'' +
+                ", veterinario='" + veterinario + '\'' +
+                '}';
     }
 }
