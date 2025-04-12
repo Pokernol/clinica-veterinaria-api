@@ -1,7 +1,8 @@
 package br.com.fatecmogidascruzes.interacoes;
 
-import br.com.fatecmogidascruzes.builders.PetBuilder;
 import br.com.fatecmogidascruzes.entities.Pet;
+import br.com.fatecmogidascruzes.factories.PetFactory;
+
 import java.util.Scanner;
 
 public class CadastroPet {
@@ -19,11 +20,10 @@ public class CadastroPet {
             System.out.println("Digite o nome do dono do pet:");
             String dono = scanner.nextLine();
 
-            Pet novoPet = new PetBuilder()
-                    .withNome(nome)
-                    .withEspecie(tipo)
-                    .withDono(dono)
-                    .build();
+            System.out.println("Digite a idade do pet:");
+            int idade = scanner.nextInt();
+
+            Pet novoPet = PetFactory.create(nome, tipo, dono, idade);
 
             System.out.println("\nCadastro de pet realizado com sucesso!");
             System.out.println(novoPet);

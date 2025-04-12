@@ -7,6 +7,7 @@ public class ConsultaBuilder extends BaseBuilder<Consulta> {
     private Pet pet;
     private String data;
     private String veterinario;
+    private String observacoes;
 
     public ConsultaBuilder withPet(Pet pet) {
         this.pet = pet;
@@ -23,8 +24,13 @@ public class ConsultaBuilder extends BaseBuilder<Consulta> {
         return this;
     }
 
+    public ConsultaBuilder withObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+        return this;
+    }
+
     @Override
     public Consulta build() {
-        return new Consulta(pet, data, veterinario);
+        return new Consulta(pet, data, veterinario, observacoes);
     }
 }

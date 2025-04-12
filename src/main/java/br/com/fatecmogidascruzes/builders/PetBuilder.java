@@ -6,6 +6,7 @@ public class PetBuilder extends BaseBuilder<Pet> {
     private String nome;
     private String especie;
     private String dono;
+    private int idade;
 
     public PetBuilder withNome(String nome) {
         this.nome = nome;
@@ -22,8 +23,13 @@ public class PetBuilder extends BaseBuilder<Pet> {
         return this;
     }
 
+    public PetBuilder withIdade(int idade) {
+        this.idade = idade;
+        return this;
+    }
+
     @Override
     public Pet build() {
-        return new Pet(nome, especie, dono);
+        return new Pet(nome, especie, dono, idade);
     }
 }
