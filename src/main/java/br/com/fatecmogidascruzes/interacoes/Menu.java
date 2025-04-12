@@ -1,20 +1,13 @@
 package br.com.fatecmogidascruzes.interacoes;
 
-import br.com.fatecmogidascruzes.entities.Pet;
-import br.com.fatecmogidascruzes.entities.Prescricao;
-import br.com.fatecmogidascruzes.entities.Consulta;
-import br.com.fatecmogidascruzes.entities.Diagnostico;
+import br.com.fatecmogidascruzes.entities.*;
+import br.com.fatecmogidascruzes.singleton.SingletonDados;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private List<Pet> pets = new ArrayList<>();
-    private List<Consulta> consultas = new ArrayList<>();
-    private List<Diagnostico> diagnosticos = new ArrayList<>();
-    private List<Prescricao> prescricoes = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private SingletonDados dados = SingletonDados.getInstancia();
 
     public void iniciar() {
         int opcao;
@@ -58,6 +51,8 @@ public class Menu {
                     System.out.println("Opção inválida, tente novamente.");
             }
         } while (opcao != 10);
+
+        scanner.close(); // Fecha o Scanner para evitar o warning
     }
 
     private void exibirMenu() {
@@ -76,54 +71,54 @@ public class Menu {
 
     private void cadastrarPet() {
         Pet novoPet = CadastroPet.cadastrarPet();
-        pets.add(novoPet);
+        dados.adicionarPet(novoPet);
     }
 
     private void agendarConsulta() {
-        Consulta consulta = CadastroConsulta.cadastrarConsulta(pets);
+        Consulta consulta = CadastroConsulta.cadastrarConsulta(dados.getPets());
         if (consulta != null) {
-            consultas.add(consulta);
+            dados.adicionarConsulta(consulta);
         }
     }
 
     private void registrarDiagnostico() {
-        Diagnostico diagnostico = CadastroDiagnostico.cadastrarDiagnostico(pets);
+        Diagnostico diagnostico = CadastroDiagnostico.cadastrarDiagnostico(dados.getPets());
         if (diagnostico != null) {
-            diagnosticos.add(diagnostico);
+            dados.adicionarDiagnostico(diagnostico);
         }
     }
 
     private void cadastrarPrescricao() {
-        Prescricao prescricao = CadastroPrescricao.cadastrarPrescricao(pets);
+        Prescricao prescricao = CadastroPrescricao.cadastrarPrescricao(dados.getPets());
         if (prescricao != null) {
-            prescricoes.add(prescricao);
+            dados.adicionarPrescricao(prescricao);
         }
     }
 
     private void listarPets() {
         System.out.println("Lista de Pets:");
-        for (Pet pet : pets) {
+        for (Pet pet : dados.getPets()) {
             System.out.println(pet);
         }
     }
 
     private void listarConsultas() {
         System.out.println("Lista de Consultas:");
-        for (Consulta consulta : consultas) {
+        for (Consulta consulta : dados.getConsultas()) {
             consulta.realizarServico();
         }
     }
 
     private void listarDiagnosticos() {
         System.out.println("Lista de Diagnósticos:");
-        for (Diagnostico diagnostico : diagnosticos) {
+        for (Diagnostico diagnostico : dados.getDiagnosticos()) {
             diagnostico.realizarServico();
         }
     }
 
     private void listarPrescricoes() {
         System.out.println("Lista de Prescrições:");
-        for (Prescricao prescricao : prescricoes) {
+        for (Prescricao prescricao : dados.getPrescricoes()) {
             prescricao.realizarServico();
         }
     }
