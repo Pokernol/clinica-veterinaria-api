@@ -1,25 +1,17 @@
 package br.com.fatecmogidascruzes.factories;
 
-import br.com.fatecmogidascruzes.entities.Pet;
-import br.com.fatecmogidascruzes.entities.Prescricao;
 import br.com.fatecmogidascruzes.builders.PrescricaoBuilder;
+import br.com.fatecmogidascruzes.entities.Prescricao;
 
-public class PrescricaoFactory extends BaseFactory<Prescricao> {
-
-    @Override
-    public Prescricao create() {
+public class PrescricaoFactory {
+    public static Prescricao criarPrescricao(int petId, int veterinarioId, int consultaId, String medicamento, String dosagem, String instrucoesUso) {
         return new PrescricaoBuilder()
-                .withPet(null)
-                .withMedicamento(null)
-                .withDosagem(null)
-                .build();
-    }
-
-    public static Prescricao create(Pet pet, String medicamento, String dosagem) {
-        return new PrescricaoBuilder()
-                .withPet(pet)
+                .withPetId(petId)
+                .withVeterinarioId(veterinarioId)
+                .withConsultaId(consultaId)
                 .withMedicamento(medicamento)
                 .withDosagem(dosagem)
+                .withInstrucoesUso(instrucoesUso)
                 .build();
     }
 }

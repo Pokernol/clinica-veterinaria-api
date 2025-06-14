@@ -1,18 +1,37 @@
 package br.com.fatecmogidascruzes.entities;
 
-public class Diagnostico implements ServicoVeterinario {
-    private Pet pet;
+public class Diagnostico {
+    private int id;
+    private int petId;
+    private int consultaId;
     private String descricao;
     private String gravidade;
 
-    public Diagnostico(Pet pet, String descricao, String gravidade) {
-        this.pet = pet;
+    public Diagnostico(int petId, int consultaId, String descricao, String gravidade) {
+        this.petId = petId;
+        this.consultaId = consultaId;
         this.descricao = descricao;
         this.gravidade = gravidade;
     }
 
-    public Pet getPet() {
-        return pet;
+    public Diagnostico(int id, int petId, int consultaId, String descricao, String gravidade) {
+        this.id = id;
+        this.petId = petId;
+        this.consultaId = consultaId;
+        this.descricao = descricao;
+        this.gravidade = gravidade;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getPetId() {
+        return petId;
+    }
+
+    public int getConsultaId() {
+        return consultaId;
     }
 
     public String getDescricao() {
@@ -23,8 +42,18 @@ public class Diagnostico implements ServicoVeterinario {
         return gravidade;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setId(int id) {
+        if (this.id == 0) {
+            this.id = id;
+        }
+    }
+
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
+
+    public void setConsultaId(int consultaId) {
+        this.consultaId = consultaId;
     }
 
     public void setDescricao(String descricao) {
@@ -36,17 +65,13 @@ public class Diagnostico implements ServicoVeterinario {
     }
 
     @Override
-    public void realizarServico() {
-        System.out.println("Diagnóstico para " + pet.getNome() + ": " + descricao +
-                " Gravidade: " + gravidade);
-    }
-
-    @Override
     public String toString() {
         return "Diagnostico{" +
-                "pet=" + pet.getNome() +
-                ", descricao='" + descricao + '\'' +
-                ", gravidade='" + gravidade + '\'' +
-                '}';
+                "\n   id=" + id +
+                ",\n    petId=" + petId +
+                ",\n    consultaId=" + consultaId +
+                ",\n    descricao='" + descricao + '\'' +
+                ",\n    gravidade='" + gravidade + '\'' +
+                "\n}";
     }
 }
