@@ -1,12 +1,20 @@
 package br.com.fatecmogidascruzes.builders;
 
 import br.com.fatecmogidascruzes.entities.Pet;
+import java.time.LocalDate;
 
-public class PetBuilder extends BaseBuilder<Pet> {
+public class PetBuilder {
+    private int id;
     private String nome;
     private String especie;
-    private String dono;
-    private int idade;
+    private String raca;
+    private LocalDate dataNascimento;
+    private int donoId;
+
+    public PetBuilder withId(int id) {
+        this.id = id;
+        return this;
+    }
 
     public PetBuilder withNome(String nome) {
         this.nome = nome;
@@ -18,18 +26,26 @@ public class PetBuilder extends BaseBuilder<Pet> {
         return this;
     }
 
-    public PetBuilder withDono(String dono) {
-        this.dono = dono;
+    public PetBuilder withRaca(String raca) {
+        this.raca = raca;
         return this;
     }
 
-    public PetBuilder withIdade(int idade) {
-        this.idade = idade;
+    public PetBuilder withDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
         return this;
     }
 
-    @Override
+    public PetBuilder withDonoId(int donoId) {
+        this.donoId = donoId;
+        return this;
+    }
+
     public Pet build() {
-        return new Pet(nome, especie, dono, idade);
+        if (this.id == 0) {
+            return new Pet(nome, especie, raca, dataNascimento, donoId);
+        } else {
+            return new Pet(id, nome, especie, raca, dataNascimento, donoId);
+        }
     }
 }

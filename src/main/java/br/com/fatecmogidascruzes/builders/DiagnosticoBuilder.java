@@ -1,15 +1,26 @@
 package br.com.fatecmogidascruzes.builders;
 
 import br.com.fatecmogidascruzes.entities.Diagnostico;
-import br.com.fatecmogidascruzes.entities.Pet;
 
-public class DiagnosticoBuilder extends BaseBuilder<Diagnostico> {
-    private Pet pet;
+public class DiagnosticoBuilder {
+    private int id;
+    private int petId;
+    private int consultaId;
     private String descricao;
     private String gravidade;
 
-    public DiagnosticoBuilder withPet(Pet pet) {
-        this.pet = pet;
+    public DiagnosticoBuilder withId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public DiagnosticoBuilder withPetId(int petId) {
+        this.petId = petId;
+        return this;
+    }
+
+    public DiagnosticoBuilder withConsultaId(int consultaId) {
+        this.consultaId = consultaId;
         return this;
     }
 
@@ -23,8 +34,11 @@ public class DiagnosticoBuilder extends BaseBuilder<Diagnostico> {
         return this;
     }
 
-    @Override
     public Diagnostico build() {
-        return new Diagnostico(pet, descricao, gravidade);
+        if (this.id == 0) {
+            return new Diagnostico(petId, consultaId, descricao, gravidade);
+        } else {
+            return new Diagnostico(id, petId, consultaId, descricao, gravidade);
+        }
     }
 }
