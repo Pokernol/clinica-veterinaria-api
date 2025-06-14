@@ -1,64 +1,116 @@
 package br.com.fatecmogidascruzes.entities;
 
+import java.time.LocalDateTime; // Importar java.time
+
 public class Consulta implements ServicoVeterinario {
-    private Pet pet;
-    private String data;
-    private String veterinario;
-    private String observacoes;
+    private int id;
+    private int petId;
+    private int veterinarioId;
+    private LocalDateTime dataHora;
+    private String motivoConsulta;
+    private String diagnostico;
+    private int prescricaoId;
 
-    public Consulta(Pet pet, String data, String veterinario, String observacoes) {
-        this.pet = pet;
-        this.data = data;
-        this.veterinario = veterinario;
-        this.observacoes = observacoes;
+    public Consulta(int petId, int veterinarioId, LocalDateTime dataHora, String motivoConsulta) {
+        this.petId = petId;
+        this.veterinarioId = veterinarioId;
+        this.dataHora = dataHora;
+        this.motivoConsulta = motivoConsulta;
+        this.diagnostico = null;
+        this.prescricaoId = 0;
     }
 
-    public Pet getPet() {
-        return pet;
+    public Consulta(int id, int petId, int veterinarioId, LocalDateTime dataHora, String motivoConsulta, String diagnostico, int prescricaoId) {
+        this.id = id;
+        this.petId = petId;
+        this.veterinarioId = veterinarioId;
+        this.dataHora = dataHora;
+        this.motivoConsulta = motivoConsulta;
+        this.diagnostico = diagnostico;
+        this.prescricaoId = prescricaoId;
     }
 
-    public String getData() {
-        return data;
+    public int getId() {
+        return id;
     }
 
-    public String getVeterinario() {
-        return veterinario;
+    public int getPetId() {
+        return petId;
     }
 
-    public String getObservacoes() {
-        return observacoes;
+    public int getVeterinarioId() {
+        return veterinarioId;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public LocalDateTime getDataHora() {
+        return dataHora;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public String getMotivoConsulta() {
+        return motivoConsulta;
     }
 
-    public void setVeterinario(String veterinario) {
-        this.veterinario = veterinario;
+    public String getDiagnostico() {
+        return diagnostico;
     }
 
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
+    public int getPrescricaoId() {
+        return prescricaoId;
+    }
+
+    public void setId(int id) {
+        if (this.id == 0) {
+            this.id = id;
+        }
+    }
+
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
+
+    public void setVeterinarioId(int veterinarioId) {
+        this.veterinarioId = veterinarioId;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    public void setMotivoConsulta(String motivoConsulta) {
+        this.motivoConsulta = motivoConsulta;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
+    public void setPrescricaoId(int prescricaoId) {
+        this.prescricaoId = prescricaoId;
     }
 
     @Override
     public void realizarServico() {
-        System.out.println("Consulta realizada para " + pet.getNome() + 
-                " com o veterinário " + getVeterinario() + " na data " + getData() +
-                ". Observações: " + getObservacoes());
+        System.out.println("Consulta agendada para Pet ID: " + petId +
+                " com Veterinário ID: " + veterinarioId + " em " + dataHora +
+                ". Motivo: " + motivoConsulta);
+        if (diagnostico != null && !diagnostico.isEmpty()) {
+            System.out.println("  Diagnóstico: " + diagnostico);
+        }
+        if (prescricaoId != 0) {
+            System.out.println("  Associada à Prescrição ID: " + prescricaoId);
+        }
     }
 
     @Override
     public String toString() {
         return "Consulta{" +
-                "pet=" + pet +
-                ", data='" + data + '\'' +
-                ", veterinario='" + veterinario + '\'' +
-                ", observacoes='" + observacoes + '\'' +
-                '}';
+                "\n   id=" + id +
+                ",\n    petId=" + petId +
+                ",\n    veterinarioId=" + veterinarioId +
+                ",\n    dataHora=" + dataHora +
+                ",\n    motivoConsulta='" + motivoConsulta + '\'' +
+                ",\n    diagnostico='" + diagnostico + '\'' +
+                ",\n    prescricaoId=" + prescricaoId +
+                "\n}";
     }
 }

@@ -1,36 +1,57 @@
 package br.com.fatecmogidascruzes.builders;
 
 import br.com.fatecmogidascruzes.entities.Consulta;
-import br.com.fatecmogidascruzes.entities.Pet;
+import java.time.LocalDateTime;
 
-public class ConsultaBuilder extends BaseBuilder<Consulta> {
-    private Pet pet;
-    private String data;
-    private String veterinario;
-    private String observacoes;
+public class ConsultaBuilder {
+    private int id;
+    private int petId;
+    private int veterinarioId;
+    private LocalDateTime dataHora;
+    private String motivoConsulta;
+    private String diagnostico;
+    private int prescricaoId;
 
-    public ConsultaBuilder withPet(Pet pet) {
-        this.pet = pet;
+    public ConsultaBuilder withId(int id) {
+        this.id = id;
         return this;
     }
 
-    public ConsultaBuilder withData(String data) {
-        this.data = data;
+    public ConsultaBuilder withPetId(int petId) {
+        this.petId = petId;
         return this;
     }
 
-    public ConsultaBuilder withVeterinario(String veterinario) {
-        this.veterinario = veterinario;
+    public ConsultaBuilder withVeterinarioId(int veterinarioId) {
+        this.veterinarioId = veterinarioId;
         return this;
     }
 
-    public ConsultaBuilder withObservacoes(String observacoes) {
-        this.observacoes = observacoes;
+    public ConsultaBuilder withDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
         return this;
     }
 
-    @Override
+    public ConsultaBuilder withMotivoConsulta(String motivoConsulta) {
+        this.motivoConsulta = motivoConsulta;
+        return this;
+    }
+
+    public ConsultaBuilder withDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+        return this;
+    }
+
+    public ConsultaBuilder withPrescricaoId(int prescricaoId) {
+        this.prescricaoId = prescricaoId;
+        return this;
+    }
+
     public Consulta build() {
-        return new Consulta(pet, data, veterinario, observacoes);
+        if (this.id == 0) {
+            return new Consulta(petId, veterinarioId, dataHora, motivoConsulta);
+        } else {
+            return new Consulta(id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId);
+        }
     }
 }
