@@ -19,60 +19,77 @@ Este é o back-end para a aplicação de gerenciamento de uma clínica veteriná
 ## Estrutura do Projeto 🗂
 ```
 ClinicaVeterinaria
-└───src
-├───main
-│   ├───java
-│   │   └───br
-│   │       └───com
-│   │           └───fatecmogidascruzes
-│   │               ├───adapters              # Camada de Adapters para conversão de objetos (Ex: Entidade para DTO)
-│   │               │   └── DonoAdapter.java
-│   │               ├───builders              # Classes Builder para construção de entidades de forma fluente
-│   │               │   ├── ConsultaBuilder.java
-│   │               │   ├── DiagnosticoBuilder.java
-│   │               │   ├── DonoBuilder.java
-│   │               │   ├── PetBuilder.java
-│   │               │   ├── PrescricaoBuilder.java
-│   │               │   └── VeterinarioBuilder.java
-│   │               ├───dao                   # Interfaces de Data Access Object (DAO)
-│   │               │   ├── ConsultaDAO.java
-│   │               │   ├── DiagnosticoDAO.java
-│   │               │   ├── DonoDAO.java
-│   │               │   ├── PetDAO.java
-│   │               │   ├── PrescricaoDAO.java
-│   │               │   └── VeterinarioDAO.java
-│   │               ├───dao
-│   │               │   └── impl              # Implementações das interfaces DAO
-│   │               │       ├── ConsultaDAOImpl.java
-│   │               │       ├── DiagnosticoDAOImpl.java
-│   │               │       ├── DonoDAOImpl.java
-│   │               │       ├── PetDAOImpl.java
-│   │               │       ├── PrescricaoDAOImpl.java
-│   │               │       └── VeterinarioDAOImpl.java
-│   │               ├───dtos                  # Data Transfer Objects (DTOs) para a camada de apresentação
-│   │               │   └── DonoComDetalhes.java
-│   │               ├───entities              # Entidades de domínio que mapeiam as tabelas do banco de dados
-│   │               │   ├── Consulta.java
-│   │               │   ├── Diagnostico.java
-│   │               │   ├── Dono.java
-│   │               │   ├── Pet.java
-│   │               │   ├── Prescricao.java
-│   │               │   ├── ServicoVeterinario.java
-│   │               │   └── Veterinario.java
-│   │               ├───exceptions            # Exceções personalizadas para tratamento de erros de negócio
-│   │               │   └── DadoDuplicadoException.java
-│   │               ├───facades               # Camada de Facade para orquestração de operações de negócio
-│   │               │   └── ClinicaVeterinariaFacade.java
-│   │               ├───factories             # Fábricas de objetos (Ex: Conexão com o banco de dados)
-│   │               │   └── ConnectionFactorySingleton.java
-│   │               ├───interacoes            # Classes para interação com o usuário (Ex: Menu de console)
-│   │               │   └── Menu.java
-│   │               └───Main.java             # Classe principal que inicia a aplicação
-│   └───resources
-│       ├── logback.xml                       # Configuração para logging com Logback
-│       └── database.properties               # Propriedades de conexão com o banco de dados
-└───test
-└───java
+├───src
+│   ├───main
+│   │   ├───java
+│   │   │   └───br
+│   │   │       └───com
+│   │   │           └───fatecmogidascruzes
+│   │   │               │   Main.java
+│   │   │               │
+│   │   │               ├───adapters
+│   │   │               │       DonoAdapter.java
+│   │   │               │
+│   │   │               ├───builders
+│   │   │               │       ConsultaBuilder.java
+│   │   │               │       DiagnosticoBuilder.java
+│   │   │               │       PetBuilder.java
+│   │   │               │       PrescricaoBuilder.java
+│   │   │               │
+│   │   │               ├───dao
+│   │   │               │   │   ConsultaDAO.java
+│   │   │               │   │   DAO.java
+│   │   │               │   │   DiagnosticoDAO.java
+│   │   │               │   │   DonoDAO.java
+│   │   │               │   │   PetDAO.java
+│   │   │               │   │   PrescricaoDAO.java
+│   │   │               │   │   VeterinarioDAO.java
+│   │   │               │   │
+│   │   │               │   └───impl
+│   │   │               │           ConsultaDAOImpl.java
+│   │   │               │           DiagnosticoDAOImpl.java
+│   │   │               │           DonoDAOImpl.java
+│   │   │               │           PetDAOImpl.java
+│   │   │               │           PrescricaoDAOImpl.java
+│   │   │               │           VeterinarioDAOImpl.java
+│   │   │               │
+│   │   │               ├───dtos
+│   │   │               │       DonoComDetalhes.java
+│   │   │               │
+│   │   │               ├───entities
+│   │   │               │       Consulta.java
+│   │   │               │       Diagnostico.java
+│   │   │               │       Dono.java
+│   │   │               │       Pet.java
+│   │   │               │       Prescricao.java
+│   │   │               │       ServicoVeterinario.java
+│   │   │               │       Veterinario.java
+│   │   │               │
+│   │   │               ├───exceptions
+│   │   │               │       DadoDuplicadoException.java
+│   │   │               │
+│   │   │               ├───facades
+│   │   │               │       ClinicaVeterinariaFacade.java
+│   │   │               │
+│   │   │               ├───factories
+│   │   │               │       ConnectionFactorySingleton.java
+│   │   │               │       ConsultaFactory.java
+│   │   │               │       DiagnosticoFactory.java
+│   │   │               │       PetFactory.java
+│   │   │               │       PrescricaoFactory.java
+│   │   │               │       ServicoFactory.java
+│   │   │               │
+│   │   │               └───interacoes
+│   │   │                       EscolherEntidade.java
+│   │   │                       Menu.java
+│   │   │
+│   │   └───resources
+│   │           schema.sql
+│   │
+│   └───test
+│       └───java
+└───target
+    │   ClinicaVeterinaria-1.0-SNAPSHOT.jar
 ```
 
 ## Funcionalidades Implementadas 🛠️
