@@ -9,5 +9,7 @@ public class Main {
 
         Menu menu = new Menu();
         menu.exibirMenu();
+        System.exit(0);
+
     }
 }

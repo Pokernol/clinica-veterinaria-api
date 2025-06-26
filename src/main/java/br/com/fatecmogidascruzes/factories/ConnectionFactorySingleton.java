@@ -86,21 +86,23 @@ public class ConnectionFactorySingleton {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
              Statement stmt = conn.createStatement()) {
 
-            StringBuilder sql = new StringBuilder();
+            StringBuilder fullSqlScript = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty() || line.startsWith("--")) {
-                    continue;
+                String trimmedLine = line.trim();
+                if (trimmedLine.isEmpty() || trimmedLine.startsWith("--")) {
+                    continue; 
                 }
-                sql.append(line);
-                if (line.endsWith(";")) {
-                    stmt.execute(sql.toString());
-                    sql.setLength(0);
-                }
+
+                fullSqlScript.append(trimmedLine).append(" ");
             }
-            if (!sql.isEmpty()) {
-                stmt.execute(sql.toString());
+
+            String[] statements = fullSqlScript.toString().split(";");
+            for (String statement : statements) {
+                String sqlToExecute = statement.trim();
+                if (!sqlToExecute.isEmpty()) {
+                    stmt.execute(sqlToExecute);
+                }
             }
         } catch (Exception e) {
             throw new SQLException("Erro ao executar script schema.sql: " + e.getMessage(), e);
@@ -116,5 +118,14 @@ public class ConnectionFactorySingleton {
             webServer.stop();
             System.out.println("Console Web H2 parado.");
         }
+        
+        try {
+            String dbPath = System.getProperty("user.home") + "/clinica_vet.mv.db";
+            java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get(dbPath));
+            System.out.println("Arquivo do banco de dados removido para reset.");
+        } catch (Exception e) {
+            System.err.println("Erro ao tentar deletar o banco: " + e.getMessage());
+        }
     }
+
 }
