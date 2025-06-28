@@ -9,7 +9,7 @@ public class ConsultaBuilder {
     private int veterinarioId;
     private LocalDateTime dataHora;
     private String motivoConsulta;
-    private String diagnostico;
+    private int diagnosticoId;
     private int prescricaoId;
 
     public ConsultaBuilder withId(int id) {
@@ -37,8 +37,8 @@ public class ConsultaBuilder {
         return this;
     }
 
-    public ConsultaBuilder withDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
+    public ConsultaBuilder withDiagnosticoId(int diagnosticoId) {
+        this.diagnosticoId = diagnosticoId;
         return this;
     }
 
@@ -51,7 +51,7 @@ public class ConsultaBuilder {
         if (this.id == 0) {
             return new Consulta(petId, veterinarioId, dataHora, motivoConsulta);
         } else {
-            return new Consulta(id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId);
+            return new Consulta(id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId);
         }
     }
 }

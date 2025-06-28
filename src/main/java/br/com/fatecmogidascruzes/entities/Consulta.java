@@ -1,6 +1,6 @@
 package br.com.fatecmogidascruzes.entities;
 
-import java.time.LocalDateTime; // Importar java.time
+import java.time.LocalDateTime;
 
 public class Consulta implements ServicoVeterinario {
     private int id;
@@ -8,7 +8,7 @@ public class Consulta implements ServicoVeterinario {
     private int veterinarioId;
     private LocalDateTime dataHora;
     private String motivoConsulta;
-    private String diagnostico;
+    private int diagnosticoId;
     private int prescricaoId;
 
     public Consulta(int petId, int veterinarioId, LocalDateTime dataHora, String motivoConsulta) {
@@ -16,17 +16,17 @@ public class Consulta implements ServicoVeterinario {
         this.veterinarioId = veterinarioId;
         this.dataHora = dataHora;
         this.motivoConsulta = motivoConsulta;
-        this.diagnostico = null;
+        this.diagnosticoId = 0;
         this.prescricaoId = 0;
     }
 
-    public Consulta(int id, int petId, int veterinarioId, LocalDateTime dataHora, String motivoConsulta, String diagnostico, int prescricaoId) {
+    public Consulta(int id, int petId, int veterinarioId, LocalDateTime dataHora, String motivoConsulta, int diagnosticoId, int prescricaoId) {
         this.id = id;
         this.petId = petId;
         this.veterinarioId = veterinarioId;
         this.dataHora = dataHora;
         this.motivoConsulta = motivoConsulta;
-        this.diagnostico = diagnostico;
+        this.diagnosticoId = diagnosticoId;
         this.prescricaoId = prescricaoId;
     }
 
@@ -50,8 +50,8 @@ public class Consulta implements ServicoVeterinario {
         return motivoConsulta;
     }
 
-    public String getDiagnostico() {
-        return diagnostico;
+    public int getDiagnosticoId() {
+        return diagnosticoId;
     }
 
     public int getPrescricaoId() {
@@ -80,8 +80,8 @@ public class Consulta implements ServicoVeterinario {
         this.motivoConsulta = motivoConsulta;
     }
 
-    public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
+    public void setDiagnosticoId(int diagnosticoId) {
+        this.diagnosticoId = diagnosticoId;
     }
 
     public void setPrescricaoId(int prescricaoId) {
@@ -93,8 +93,8 @@ public class Consulta implements ServicoVeterinario {
         System.out.println("Consulta agendada para Pet ID: " + petId +
                 " com Veterinário ID: " + veterinarioId + " em " + dataHora +
                 ". Motivo: " + motivoConsulta);
-        if (diagnostico != null && !diagnostico.isEmpty()) {
-            System.out.println("  Diagnóstico: " + diagnostico);
+        if (diagnosticoId != 0) {
+            System.out.println("  Diagnóstico: " + diagnosticoId);
         }
         if (prescricaoId != 0) {
             System.out.println("  Associada à Prescrição ID: " + prescricaoId);
@@ -109,7 +109,7 @@ public class Consulta implements ServicoVeterinario {
                 ",\n    veterinarioId=" + veterinarioId +
                 ",\n    dataHora=" + dataHora +
                 ",\n    motivoConsulta='" + motivoConsulta + '\'' +
-                ",\n    diagnostico='" + diagnostico + '\'' +
+                ",\n    diagnosticoId=" + diagnosticoId +
                 ",\n    prescricaoId=" + prescricaoId +
                 "\n}";
     }

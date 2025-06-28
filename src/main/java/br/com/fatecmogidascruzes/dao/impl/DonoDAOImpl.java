@@ -148,6 +148,31 @@ public class DonoDAOImpl implements DonoDAO {
     }
 
     @Override
+    public Dono findByPetId(int petId) throws SQLException {
+        String sql = "SELECT id, nome, telefone, email FROM Donos WHERE pet_id = ?";
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, petId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Dono(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("telefone"),
+                            rs.getString("email")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Erro SQL inesperado ao buscar dono por ID {}: SQLState: {} - Mensagem: {}",
+                    petId, e.getSQLState(), e.getMessage(), e);
+            throw e;
+        }
+        return null;
+    }
+
+    @Override
     public List<Dono> findAll() throws SQLException {
         List<Dono> donos = new ArrayList<>();
         String sql = "SELECT id, nome, telefone, email FROM Donos";
