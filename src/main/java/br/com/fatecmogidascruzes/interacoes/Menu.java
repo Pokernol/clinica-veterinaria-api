@@ -7,7 +7,6 @@ import br.com.fatecmogidascruzes.factories.ConnectionFactorySingleton;
 import br.com.fatecmogidascruzes.dtos.DonoComDetalhes;
 
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -130,7 +129,13 @@ public class Menu {
         }
     }
 
-    private void cadastrarPet() {
+    private void cadastrarPet() throws SQLException {
+        List<Dono> donos = facade.listarTodosDonos();
+        if (donos.isEmpty()) {
+            System.out.println("Nenhum dono cadastrado para cadastrar pet.");
+            return;
+        }
+
         System.out.println("\n--- Cadastrar Novo Pet ---");
         System.out.print("Nome do Pet: ");
         String nome = scanner.nextLine();
@@ -140,12 +145,13 @@ public class Menu {
         String raca = scanner.nextLine();
         System.out.print("Data de Nascimento (AAAA-MM-DD): ");
         String dataNascimentoStr = scanner.nextLine();
-        System.out.print("ID do Dono: ");
-        int donoId = obterInteiro();
+        System.out.println("Escolha o dono para o pet:");
+        Dono donoEscolhido = EscolherEntidade.escolher(scanner, donos);
+        if (donoEscolhido == null) return;
 
         try {
             LocalDate dataNascimento = LocalDate.parse(dataNascimentoStr);
-            facade.registrarNovoPet(nome, especie, raca, dataNascimento, donoId);
+            facade.registrarNovoPet(nome, especie, raca, dataNascimento, donoEscolhido.getId());
             System.out.println("Pet cadastrado com sucesso!");
         } catch (DateTimeParseException e) {
             System.out.println("Formato de data inválido. Use AAAA-MM-DD.");
@@ -215,7 +221,7 @@ public class Menu {
         Pet petEscolhido = EscolherEntidade.escolher(scanner, pets);
         if (petEscolhido == null) return;
 
-        List<Consulta> consultasDoPet = facade.buscarConsultasPorPet(petEscolhido.getId());
+        List<Consulta> consultasDoPet = facade.buscarConsultasPorPetId(petEscolhido.getId());
         if (consultasDoPet.isEmpty()) {
             System.out.println("Nenhuma consulta encontrada para este pet.");
             return;
@@ -230,7 +236,14 @@ public class Menu {
         String gravidade = scanner.nextLine();
 
         try {
-            facade.registrarDiagnostico(petEscolhido.getId(), consultaEscolhida.getId(), descricao, gravidade);
+            int diagnosticoId = facade.registrarDiagnostico(petEscolhido.getId(), consultaEscolhida.getId(), descricao, gravidade);
+            consultaEscolhida.setDiagnosticoId(diagnosticoId);
+            if (consultaEscolhida.getDiagnosticoId() == 0) {
+                System.out.println("Erro ao registrar diagnóstico. Diagnóstico ID inválido.");
+                return;
+            }
+            facade.atualizarConsulta(consultaEscolhida);
+
             System.out.println("Diagnóstico registrado com sucesso!");
         } catch (SQLException e) {
             System.out.println("Erro no banco de dados ao registrar diagnóstico: " + e.getMessage());
@@ -261,7 +274,7 @@ public class Menu {
         Veterinario veterinarioEscolhido = EscolherEntidade.escolher(scanner, veterinarios);
         if (veterinarioEscolhido == null) return;
 
-        List<Consulta> consultasDoPet = facade.buscarConsultasPorPet(petEscolhido.getId());
+        List<Consulta> consultasDoPet = facade.buscarConsultasPorPetId(petEscolhido.getId());
         if (consultasDoPet.isEmpty()) {
             System.out.println("Nenhuma consulta encontrada para este pet para vincular a prescrição.");
             System.out.print("Deseja continuar sem vincular a uma consulta existente? (s/n): ");
@@ -288,7 +301,15 @@ public class Menu {
         String instrucoesUso = scanner.nextLine();
 
         try {
-            facade.registrarPrescricao(petEscolhido.getId(), veterinarioEscolhido.getId(), consultaId, medicamento, dosagem, instrucoesUso);
+            int prescricaoId = facade.registrarPrescricao(petEscolhido.getId(), veterinarioEscolhido.getId(), consultaId, medicamento, dosagem, instrucoesUso);
+            consultaEscolhida.setPrescricaoId(prescricaoId);
+            
+            if (consultaEscolhida.getPrescricaoId() == 0) {
+                System.out.println("Erro ao registrar prescrição. Prescrição ID inválido.");
+                return;
+            }
+            facade.atualizarConsulta(consultaEscolhida);
+
             System.out.println("Prescrição registrada com sucesso!");
         } catch (SQLException e) {
             System.out.println("Erro no banco de dados ao registrar prescrição: " + e.getMessage());
@@ -330,7 +351,8 @@ public class Menu {
                 System.out.println("Nenhum veterinário cadastrado.");
             } else {
                 for (Veterinario vet : veterinarios) {
-                    System.out.println("ID: " + vet.getId() + ", Nome: " + vet.getNome() + ", CRMV: " + vet.getCrmv() + ", Especialidade: " + vet.getEspecialidade());
+                    System.out.println(vet);
+                    System.out.println("--------------------");
                 }
             }
         } catch (SQLException e) {
@@ -350,7 +372,8 @@ public class Menu {
                 System.out.println("Nenhum pet cadastrado.");
             } else {
                 for (Pet pet : pets) {
-                    System.out.println("ID: " + pet.getId() + ", Nome: " + pet.getNome() + ", Espécie: " + pet.getEspecie() + ", Raça: " + pet.getRaca() + ", Nasc: " + pet.getDataNascimento() + ", Dono ID: " + pet.getDonoId());
+                    System.out.println(pet);
+                    System.out.println("--------------------");
                 }
             }
         } catch (SQLException e) {
@@ -369,10 +392,9 @@ public class Menu {
             if (consultas.isEmpty()) {
                 System.out.println("Nenhuma consulta agendada.");
             } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                 for (Consulta cons : consultas) {
-                    String dataHoraFormatada = cons.getDataHora() != null ? cons.getDataHora().format(formatter) : "N/A";
-                    System.out.println("ID: " + cons.getId() + ", Pet ID: " + cons.getPetId() + ", Vet ID: " + cons.getVeterinarioId() + ", Data/Hora: " + dataHoraFormatada + ", Motivo: " + cons.getMotivoConsulta() + ", Diagnóstico: " + (cons.getDiagnostico() != null ? cons.getDiagnostico() : "N/A") + ", Prescrição ID: " + (cons.getPrescricaoId() != 0 ? cons.getPrescricaoId() : "N/A"));
+                    System.out.println(cons);
+                    System.out.println("--------------------");
                 }
             }
         } catch (SQLException e) {
@@ -392,7 +414,8 @@ public class Menu {
                 System.out.println("Nenhum diagnóstico registrado.");
             } else {
                 for (Diagnostico diag : diagnosticos) {
-                    System.out.println("ID: " + diag.getId() + ", Pet ID: " + diag.getPetId() + ", Consulta ID: " + (diag.getConsultaId() != 0 ? diag.getConsultaId() : "N/A") + ", Descrição: " + diag.getDescricao() + ", Gravidade: " + diag.getGravidade());
+                    System.out.println(diag);
+                    System.out.println("--------------------");
                 }
             }
         } catch (SQLException e) {
@@ -412,7 +435,8 @@ public class Menu {
                 System.out.println("Nenhuma prescrição registrada.");
             } else {
                 for (Prescricao pres : prescricoes) {
-                    System.out.println("ID: " + pres.getId() + ", Pet ID: " + pres.getPetId() + ", Vet ID: " + pres.getVeterinarioId() + ", Consulta ID: " + (pres.getConsultaId() != 0 ? pres.getConsultaId() : "N/A") + ", Medicamento: " + pres.getMedicamento() + ", Dosagem: " + pres.getDosagem() + ", Instruções: " + pres.getInstrucoesUso());
+                    System.out.println(pres);
+                    System.out.println("--------------------");
                 }
             }
         } catch (SQLException e) {
@@ -424,18 +448,4 @@ public class Menu {
         }
     }
 
-    // --- Métodos Auxiliares ---
-    private int obterInteiro() {
-        while (true) {
-            try {
-                return scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, digite um número inteiro.");
-                logger.warn("Entrada não numérica em obterInteiro.", e);
-                scanner.nextLine();
-            } finally {
-                scanner.nextLine();
-            }
-        }
-    }
 }

@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
 
     @Override
     public void update(Consulta consulta) throws SQLException {
-        String sql = "UPDATE Consultas SET petId = ?, veterinarioId = ?, dataHora = ?, motivoConsulta = ?, diagnostico = ?, prescricaoId = ? WHERE id = ?";
+        String sql = "UPDATE Consultas SET petId = ?, veterinarioId = ?, dataHora = ?, motivoConsulta = ?, diagnosticoId = ?, prescricaoId = ? WHERE id = ?";
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -79,7 +80,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
             stmt.setInt(2, consulta.getVeterinarioId());
             stmt.setTimestamp(3, Timestamp.valueOf(consulta.getDataHora()));
             stmt.setString(4, consulta.getMotivoConsulta());
-            stmt.setString(5, consulta.getDiagnostico());
+            stmt.setInt(5, consulta.getDiagnosticoId());
 
             if (consulta.getPrescricaoId() == 0) {
                 stmt.setNull(6, java.sql.Types.INTEGER);
@@ -136,7 +137,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
 
     @Override
     public Consulta findById(int id) throws SQLException {
-        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId FROM Consultas WHERE id = ?";
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas WHERE id = ?";
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -149,7 +150,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
                             .withVeterinarioId(rs.getInt("veterinarioId"))
                             .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
                             .withMotivoConsulta(rs.getString("motivoConsulta"))
-                            .withDiagnostico(rs.getString("diagnostico"))
+                            .withDiagnosticoId(rs.getInt("diagnosticoId"))
                             .withPrescricaoId(rs.getInt("prescricaoId"))
                             .build();
                 }
@@ -165,7 +166,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
     @Override
     public List<Consulta> findAll() throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
-        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId FROM Consultas";
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas";
         try (Connection conn = connectionFactory.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -177,7 +178,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
                         .withVeterinarioId(rs.getInt("veterinarioId"))
                         .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
                         .withMotivoConsulta(rs.getString("motivoConsulta"))
-                        .withDiagnostico(rs.getString("diagnostico"))
+                        .withDiagnosticoId(rs.getInt("diagnosticoId"))
                         .withPrescricaoId(rs.getInt("prescricaoId"))
                         .build());
             }
@@ -192,7 +193,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
     @Override
     public List<Consulta> findByPetId(int petId) throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
-        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId FROM Consultas WHERE petId = ?";
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas WHERE petId = ?";
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -205,7 +206,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
                             .withVeterinarioId(rs.getInt("veterinarioId"))
                             .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
                             .withMotivoConsulta(rs.getString("motivoConsulta"))
-                            .withDiagnostico(rs.getString("diagnostico"))
+                            .withDiagnosticoId(rs.getInt("diagnosticoId"))
                             .withPrescricaoId(rs.getInt("prescricaoId"))
                             .build());
                 }
@@ -221,7 +222,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
     @Override
     public List<Consulta> findByVeterinarioId(int veterinarioId) throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
-        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnostico, prescricaoId FROM Consultas WHERE veterinarioId = ?";
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas WHERE veterinarioId = ?";
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -234,7 +235,7 @@ public class ConsultaDAOImpl implements ConsultaDAO {
                             .withVeterinarioId(rs.getInt("veterinarioId"))
                             .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
                             .withMotivoConsulta(rs.getString("motivoConsulta"))
-                            .withDiagnostico(rs.getString("diagnostico"))
+                            .withDiagnosticoId(rs.getInt("diagnosticoId"))
                             .withPrescricaoId(rs.getInt("prescricaoId"))
                             .build());
                 }
@@ -242,6 +243,64 @@ public class ConsultaDAOImpl implements ConsultaDAO {
         } catch (SQLException e) {
             logger.error("Erro SQL inesperado ao buscar consultas por Veterinário ID {}: SQLState: {} - Mensagem: {}",
                     veterinarioId, e.getSQLState(), e.getMessage(), e);
+            throw e;
+        }
+        return consultas;
+    }
+
+    @Override
+    public List<Consulta> findByDataHora(LocalDateTime dataHora) throws SQLException {
+        List<Consulta> consultas = new ArrayList<>();
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas WHERE dataHora = ?";
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, Timestamp.valueOf(dataHora));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    consultas.add(new ConsultaBuilder()
+                            .withId(rs.getInt("id"))
+                            .withPetId(rs.getInt("petId"))
+                            .withVeterinarioId(rs.getInt("veterinarioId"))
+                            .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
+                            .withMotivoConsulta(rs.getString("motivoConsulta"))
+                            .withDiagnosticoId(rs.getInt("diagnosticoId"))
+                            .withPrescricaoId(rs.getInt("prescricaoId"))
+                            .build());
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Erro SQL inesperado ao buscar consultas por data/hora {}: SQLState: {} - Mensagem: {}",
+                    dataHora, e.getSQLState(), e.getMessage(), e);
+            throw e;
+        }
+        return consultas;
+    }
+
+    @Override
+    public List<Consulta> findByPrescricaoId(int prescricaoId) throws SQLException {
+        List<Consulta> consultas = new ArrayList<>();
+        String sql = "SELECT id, petId, veterinarioId, dataHora, motivoConsulta, diagnosticoId, prescricaoId FROM Consultas WHERE prescricaoId = ?";
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, prescricaoId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    consultas.add(new ConsultaBuilder()
+                            .withId(rs.getInt("id"))
+                            .withPetId(rs.getInt("petId"))
+                            .withVeterinarioId(rs.getInt("veterinarioId"))
+                            .withDataHora(rs.getTimestamp("dataHora").toLocalDateTime())
+                            .withMotivoConsulta(rs.getString("motivoConsulta"))
+                            .withDiagnosticoId(rs.getInt("diagnosticoId"))
+                            .withPrescricaoId(rs.getInt("prescricaoId"))
+                            .build());
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Erro SQL inesperado ao buscar consultas por prescricao ID {}: SQLState: {} - Mensagem: {}",
+                    prescricaoId, e.getSQLState(), e.getMessage(), e);
             throw e;
         }
         return consultas;
