@@ -38,6 +38,8 @@ public class ClinicaVeterinariaFacade {
         this.donoAdapter = new DonoAdapter(petDAO);
     }
 
+    // --- Métodos de Cadastro ---
+
     public void registrarNovoDono(String nome, String telefone, String email) throws SQLException {
         Dono dono = new Dono(0, nome, telefone, email);
         try {
@@ -96,7 +98,7 @@ public class ClinicaVeterinariaFacade {
         consultaDAO.add(novaConsulta);
     }
 
-    public void registrarDiagnostico(int petId, int consultaId, String descricao, String gravidade) throws SQLException {
+    public int registrarDiagnostico(int petId, int consultaId, String descricao, String gravidade) throws SQLException {
         if (petDAO.findById(petId) == null) {
             throw new IllegalArgumentException("Pet com ID " + petId + " não encontrado.");
         }
@@ -111,9 +113,10 @@ public class ClinicaVeterinariaFacade {
                 .withGravidade(gravidade)
                 .build();
         diagnosticoDAO.add(novoDiagnostico);
+        return novoDiagnostico.getId();
     }
 
-    public void registrarPrescricao(int petId, int veterinarioId, int consultaId, String medicamento, String dosagem, String instrucoesUso) throws SQLException {
+    public int registrarPrescricao(int petId, int veterinarioId, int consultaId, String medicamento, String dosagem, String instrucoesUso) throws SQLException {
         if (petDAO.findById(petId) == null) {
             throw new IllegalArgumentException("Pet com ID " + petId + " não encontrado.");
         }
@@ -134,7 +137,122 @@ public class ClinicaVeterinariaFacade {
                 .withInstrucoesUso(instrucoesUso)
                 .build();
         prescricaoDAO.add(novaPrescricao);
+        return novaPrescricao.getId();
     }
+
+    // --- Métodos de Atualização ---
+
+    public void atualizarConsulta(Consulta consulta) throws SQLException {
+        try {
+            consultaDAO.update(consulta);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar consulta: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void atualizarPrescricao(Prescricao prescricao) throws SQLException {
+        try {
+            prescricaoDAO.update(prescricao);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar prescricao: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void atualizarDiagnostico(Diagnostico diagnostico) throws SQLException {
+        try {
+            diagnosticoDAO.update(diagnostico);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar diagnostico: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void atualizarDono(Dono dono) throws SQLException {
+        try {
+            donoDAO.update(dono);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar dono: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void atualizarVeterinario(Veterinario veterinario) throws SQLException {
+        try {
+            veterinarioDAO.update(veterinario);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar veterinario: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void atualizarPet(Pet pet) throws SQLException {
+        try {
+            petDAO.update(pet);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao atualizar pet: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    // --- Métodos de Exclusão ---
+
+    public void excluirConsulta(int id) throws SQLException {
+        try {
+            consultaDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir consulta: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void excluirPrescricao(int id) throws SQLException {
+        try {
+            prescricaoDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir prescricao: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void excluirDiagnostico(int id) throws SQLException {
+        try {
+            diagnosticoDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir diagnostico: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void excluirDono(int id) throws SQLException {
+        try {
+            donoDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir dono: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void excluirVeterinario(int id) throws SQLException {
+        try {
+            veterinarioDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir veterinario: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public void excluirPet(int id) throws SQLException {
+        try {
+            petDAO.delete(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao excluir pet: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    // --- Métodos de Listagem ---
 
     public List<Dono> listarTodosDonos() throws SQLException {
         try {
@@ -146,7 +264,12 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Dono buscarDonoPorId(int id) throws SQLException {
-        return donoDAO.findById(id);
+        try {
+            return donoDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar dono por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<Veterinario> listarTodosVeterinarios() throws SQLException {
@@ -159,7 +282,12 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Veterinario buscarVeterinarioPorId(int id) throws SQLException {
-        return veterinarioDAO.findById(id);
+        try {
+            return veterinarioDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar veterinario por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<Pet> listarTodosPets() throws SQLException {
@@ -172,7 +300,12 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Pet buscarPetPorId(int id) throws SQLException {
-        return petDAO.findById(id);
+        try {
+            return petDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar pet por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<Consulta> listarTodasConsultas() throws SQLException {
@@ -185,11 +318,48 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Consulta buscarConsultaPorId(int id) throws SQLException {
-        return consultaDAO.findById(id);
+        try {
+            return consultaDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar consulta por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
-    public List<Consulta> buscarConsultasPorPet(int petId) throws SQLException {
-        return consultaDAO.findByPetId(petId);
+    public List<Consulta> buscarConsultasPorPetId(int petId) throws SQLException {
+        try {
+            return consultaDAO.findByPetId(petId);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar consultas por pet ID: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<Consulta> buscarConsultasPorVeterinarioId(int veterinarioId) throws SQLException {
+        try {
+            return consultaDAO.findByVeterinarioId(veterinarioId);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar consultas por veterinario ID: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<Consulta> buscarConsultasPorDataHora(LocalDateTime dataHora) throws SQLException {
+        try {
+            return consultaDAO.findByDataHora(dataHora);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar consultas por data/hora: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    public List<Consulta> buscarConsultasPorPrescricaoId(int prescricaoId) throws SQLException {
+        try {
+            return consultaDAO.findByPrescricaoId(prescricaoId);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar consultas por prescricao ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<Diagnostico> listarTodosDiagnosticos() throws SQLException {
@@ -202,7 +372,12 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Diagnostico buscarDiagnosticoPorId(int id) throws SQLException {
-        return diagnosticoDAO.findById(id);
+        try {
+            return diagnosticoDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar diagnostico por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<Prescricao> listarTodasPrescricoes() throws SQLException {
@@ -215,7 +390,12 @@ public class ClinicaVeterinariaFacade {
     }
 
     public Prescricao buscarPrescricaoPorId(int id) throws SQLException {
-        return prescricaoDAO.findById(id);
+        try {
+            return prescricaoDAO.findById(id);
+        } catch (SQLException e) {
+            logger.error("Erro de banco de dados ao buscar prescricao por ID: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<DonoComDetalhes> listarDonosComPets() throws SQLException {
@@ -228,12 +408,12 @@ public class ClinicaVeterinariaFacade {
         }
     }
 
-    public DonoComDetalhes obterDonoComPets(int id) throws SQLException {
+    public DonoComDetalhes buscarDonoComPetsPorPetId(int petId) throws SQLException {
         try {
-            Dono dono = donoDAO.findById(id);
+            Dono dono = donoDAO.findByPetId(petId);
             return donoAdapter.adapt(dono);
         } catch (SQLException e) {
-            logger.error("Erro de banco de dados ao obter dono com pets por ID {}: {}", id, e.getMessage(), e);
+            logger.error("Erro de banco de dados ao obter dono com pets por ID {}: {}", petId, e.getMessage(), e);
             throw e;
         }
     }

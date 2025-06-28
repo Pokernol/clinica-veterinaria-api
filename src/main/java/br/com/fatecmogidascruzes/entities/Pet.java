@@ -1,6 +1,6 @@
 package br.com.fatecmogidascruzes.entities;
 
-import java.time.LocalDate; // Importar java.time
+import java.time.LocalDate;
 
 public class Pet {
     private int id;

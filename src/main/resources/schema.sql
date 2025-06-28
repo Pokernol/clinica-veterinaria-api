@@ -40,7 +40,7 @@ CREATE TABLE Consultas (
     veterinarioId INT NOT NULL,
     dataHora TIMESTAMP NOT NULL,
     motivoConsulta VARCHAR(500),
-    diagnostico VARCHAR(1000),
+    diagnosticoId INT,
     prescricaoId INT,
     FOREIGN KEY (petId) REFERENCES Pets(id),
     FOREIGN KEY (veterinarioId) REFERENCES Veterinarios(id)
@@ -73,4 +73,8 @@ CREATE TABLE Prescricoes (
 
 ALTER TABLE Consultas
 ADD CONSTRAINT FK_ConsultaPrescricao FOREIGN KEY (prescricaoId)
-REFERENCES Prescricoes(id)
+REFERENCES Prescricoes(id);
+
+ALTER TABLE Consultas
+ADD CONSTRAINT FK_ConsultaDiagnostico FOREIGN KEY (diagnosticoId)
+REFERENCES Diagnosticos(id);
